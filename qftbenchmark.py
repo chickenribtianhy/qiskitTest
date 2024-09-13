@@ -4,9 +4,16 @@ from qiskit.circuit.library import QFT
 from utils import *
 import os
 import time
-from concurrent.futures import ThreadPoolExecutor
+# from qiskit.utils import algorithm_globals
+# from concurrent.futures import ThreadPoolExecutor
 
-FILE_NAME = "qft_benchmark_test.txt"
+
+# consistent_seed_to_all_processes = 314159
+# algorithm_globals.random_seed = consistent_seed_to_all_processes
+
+
+
+FILE_NAME = "qft_benchmark.txt"
 CPU_START_MEM = get_cpu_memory()
 
 def benchmark_qft(num_qubits, timeout=17, time_sleep=0.01):
@@ -24,16 +31,16 @@ def benchmark_qft(num_qubits, timeout=17, time_sleep=0.01):
         f.write(f"{num_qubits:<20}")
 
     # Run the simulation
-    cpu_start_mem = get_cpu_memory()
     pid = os.fork()
     if pid > 0:
         # monitor run time of the simulation
-        time.sleep(0.1)
-        exc = ThreadPoolExecutor(max_workers=2)
-        backend.set_options(executor=exc)
-        backend.set_options(max_job_size=1)
+        # exc = ThreadPoolExecutor(max_workers=2)
+        # backend.set_options(executor=exc)
+        # backend.set_options(max_job_size=1)
         start_time = time.time()
-        result = backend.run(transpiled_qft, shots=1<<10).result()
+        # result = backend.run(transpiled_qft, shots=1<<10).result()
+        result = backend.run(transpiled_qft, shots=1<<10, 
+                                blocking_enable=True, blocking_qubits=num_qubits).result()
         end_time = time.time()
         duration = end_time - start_time
         with open(FILE_NAME, "a") as f:
@@ -59,7 +66,7 @@ if __name__ == "__main__":
     with open(FILE_NAME, "w") as f:
         # f.write("num_qubits\tduration(s)\t\tgpu_mem_used(MiB)\t\tcpu_mem_used(MiB)\n")
         f.write(f"{'num_qubits':<20}{'duration(s)':<20}{'gpu_mem_used(MiB)':<20}{'cpu_mem_used(MiB)':<20}\n")
-   
+    
     for i in range(1, 33):
         if i <= 20:
             timeout = 1
@@ -69,3 +76,4 @@ if __name__ == "__main__":
             timeout = 17
         benchmark_qft(num_qubits=i, timeout=timeout, time_sleep=0.01)
     # benchmark_qft(num_qubits=32, timeout=17, time_sleep=0.01)
+    # print(os.environ["CUDA_VISIBLE_DEVICES"])

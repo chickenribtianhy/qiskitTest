@@ -1,0 +1,4 @@
+qiskit
+qiskit-aer-gpu-cu11
+nvidia-ml-py3
+mpi4py

@@ -39,10 +39,3 @@ def monitor_memory(timeout=10, time_sleep=0.01):
         time.sleep(time_sleep)
     return gpu_mem_list, cpu_mem_list
 
-
-def monitor_resources(interval=0.01, keep_monitoring=True):
-    while keep_monitoring:
-        memory_use = psutil.virtual_memory().used / (1024 ** 3)  # Convert from bytes to GB
-        print(f"CPU Memory Used: {memory_use:.2f} GB")
-        print("GPU Memory Used:", get_gpu_memory(), "MiB")
-        time.sleep(interval)
