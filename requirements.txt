@@ -1,4 +1,4 @@
-qiskit
-qiskit-aer-gpu-cu11
+qiskit=1.2.1
+qiskit-aer-gpu-cu11=0.15.0
 nvidia-ml-py3
-mpi4py
+# mpi4py

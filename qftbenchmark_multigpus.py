@@ -34,5 +34,6 @@ if __name__ == "__main__":
     # nvidia_smi.nvmlInit()
     # deviceCount = nvidia_smi.nvmlDeviceGetCount()
     # print(deviceCount)
-    benchmark_qft(num_qubits=34, multi_gpu=True, precision="single")
+    # benchmark_qft(num_qubits=34, multi_gpu=True, precision="single")
+    benchmark_qft(num_qubits=33, multi_gpu=True, precision="double")
 
